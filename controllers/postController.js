@@ -48,7 +48,30 @@ const getAllPost = async(req,res) => {
     }
 };
 
-const getSinglePost = async(req,res) => { };
+const getSinglePost = async(req,res) => { 
+    try{
+        const {id} = req.params;
+        const post = await Post.findById(id).populate("user","name email");
+        if(!post){
+            return res.status(404).json({
+                success:false,
+                message: "Post Not Found"
+            });
+        }
+        res.status(200).json({
+            success:false,
+            message: "Post Found",
+            post
+        })
+    }
+    catch(e){
+        res.status(500).json({
+            success:false,
+            message: " Unable to find post",
+            error:e.message
+        });
+    }
+};
 
 const updatePost = async(req,res) => { };
 
