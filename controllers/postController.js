@@ -59,7 +59,7 @@ const getSinglePost = async(req,res) => {
             });
         }
         res.status(200).json({
-            success:false,
+            success:true,
             message: "Post Found",
             post
         })
@@ -73,7 +73,40 @@ const getSinglePost = async(req,res) => {
     }
 };
 
-const updatePost = async(req,res) => { };
+const updatePost = async(req,res) => { 
+    try{
+        const {id} = req.params;
+        const {title , content}  = req.body;
+        const post = await Post.findById(id);
+        if(!post){
+            return res.status(404).json({
+                success:false,
+                message: "Post not found"
+            });
+        }
+        if(post.user.toString() !== req.user._id.toString()){
+            return res.status(403).json({
+                success:false,
+                message: "You can only edit your own post"
+            });
+        }
+        post.title = title || post.title;
+        post.content = content || post.content;
+        await post.save();
+        res.status(200).json({
+            success:true,
+            message: "Post Updated",
+            post
+        });
+    }
+    catch(e){
+        res.status(500).json({
+            success:false,
+            message: "Unable to update",
+            error:e.message
+        });
+    }
+};
 
 const deletePost = async(req,res) => { };
 
