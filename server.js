@@ -2,7 +2,8 @@ const express = require("express");
 const dotenv = require("dotenv");
 const cors = require("cors");
 const connectDB = require("./config/db");
-dotenv.config();
+// dotenv.config();
+require('dotenv').config();
 connectDB();
 
 const app = express();
@@ -23,3 +24,4 @@ app.listen(PORT , ()=>{
     // console.log("Server Started at http://localhost:" + PORT);
     console.log(`Server Started at http://localhost:${PORT}`);
 });
+
